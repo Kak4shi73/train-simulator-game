@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <title>Indian Train Simulator (Lightweight)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="app">
+      <canvas id="gameCanvas" width="1280" height="720" aria-label="Game Canvas"></canvas>
+
+      <div id="hud" aria-live="polite">
+        <div class="hud-row">
+          <div class="hud-card">
+            <div class="label">Speed</div>
+            <div class="value"><span id="speedValue">0</span> km/h</div>
+          </div>
+          <div class="hud-card">
+            <div class="label">Throttle</div>
+            <div class="value"><span id="throttleValue">0</span>%</div>
+          </div>
+          <div class="hud-card">
+            <div class="label">Brake</div>
+            <div class="value"><span id="brakeValue">0</span>%</div>
+          </div>
+          <div class="hud-card">
+            <div class="label">Passengers</div>
+            <div class="value"><span id="passengersValue">0</span> / <span id="capacityValue">0</span></div>
+          </div>
+          <div class="hud-card">
+            <div class="label">Signal</div>
+            <div class="value"><span id="signalAspect">G</span></div>
+          </div>
+        </div>
+        <div class="hud-row">
+          <div class="hud-card wide">
+            <div class="label">Current Station</div>
+            <div class="value"><span id="currentStation">—</span></div>
+          </div>
+          <div class="hud-card wide">
+            <div class="label">Next Station</div>
+            <div class="value"><span id="nextStation">—</span> • <span id="nextStationDistance">—</span> km</div>
+          </div>
+          <div class="hud-card">
+            <div class="label">Rule</div>
+            <div class="value"><span id="ruleHint">—</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="controls">
+        <button id="throttleUp" title="Increase Throttle (W / ArrowUp)">▲</button>
+        <button id="throttleDown" title="Decrease Throttle (S / ArrowDown)">▼</button>
+        <button id="brakeBtn" title="Apply Brake (B)">Brake</button>
+        <button id="hornBtn" title="Horn (H / Space)">Horn</button>
+      </div>
+
+      <div id="overlay" class="hidden">
+        <div id="overlayText"></div>
+        <button id="resumeBtn" class="hidden">Resume</button>
+      </div>
+    </div>
+
+    <script src="game.js"></script>
+  </body>
+</html> 
