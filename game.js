@@ -106,13 +106,13 @@
   // Distances are cumulative along the route
   const routeStations = [
     { name: 'Mumbai CSMT', km: 0 },
-    { name: 'Dadar', km: 10 },
-    { name: 'Thane', km: 24 },
-    { name: 'Kalyan Jn', km: 44 },
-    { name: 'Karjat', km: 84 },
-    { name: 'Lonavala', km: 113 },
-    { name: 'Shivajinagar', km: 171 },
-    { name: 'Pune Jn', km: 177 }
+    { name: 'Dadar', km: 9.01 },
+    { name: 'Thane', km: 34.0 },
+    { name: 'Kalyan Jn', km: 51.2 },
+    { name: 'Karjat', km: 76.86 },
+    { name: 'Lonavala', km: 104.69 },
+    { name: 'Shivajinagar', km: 165.93 },
+    { name: 'Pune Jn', km: 168.37 }
   ];
   const routeLengthKm = routeStations[routeStations.length - 1].km;
 

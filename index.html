@@ -1,70 +1,247 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <title>Indian Train Simulator (Lightweight)</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <div id="app">
-      <canvas id="gameCanvas" width="1280" height="720" aria-label="Game Canvas"></canvas>
-
-      <div id="hud" aria-live="polite">
-        <div class="hud-row">
-          <div class="hud-card">
-            <div class="label">Speed</div>
-            <div class="value"><span id="speedValue">0</span> km/h</div>
-          </div>
-          <div class="hud-card">
-            <div class="label">Throttle</div>
-            <div class="value"><span id="throttleValue">0</span>%</div>
-          </div>
-          <div class="hud-card">
-            <div class="label">Brake</div>
-            <div class="value"><span id="brakeValue">0</span>%</div>
-          </div>
-          <div class="hud-card">
-            <div class="label">Passengers</div>
-            <div class="value"><span id="passengersValue">0</span> / <span id="capacityValue">0</span></div>
-          </div>
-          <div class="hud-card">
-            <div class="label">Signal</div>
-            <div class="value"><span id="signalAspect">G</span></div>
-          </div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Train Simulator 3D</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="loadingScreen">
+        <div class="loading-content">
+            <div class="train-loader">
+                <div class="train-body"></div>
+                <div class="train-wheels">
+                    <div class="wheel wheel1"></div>
+                    <div class="wheel wheel2"></div>
+                    <div class="wheel wheel3"></div>
+                </div>
+            </div>
+            <h2>Loading Advanced Train Simulator...</h2>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
         </div>
-        <div class="hud-row">
-          <div class="hud-card wide">
-            <div class="label">Current Station</div>
-            <div class="value"><span id="currentStation">—</span></div>
-          </div>
-          <div class="hud-card wide">
-            <div class="label">Next Station</div>
-            <div class="value"><span id="nextStation">—</span> • <span id="nextStationDistance">—</span> km</div>
-          </div>
-          <div class="hud-card">
-            <div class="label">Rule</div>
-            <div class="value"><span id="ruleHint">—</span></div>
-          </div>
+    </div>
+
+    <div id="gameContainer">
+        <!-- 3D Scene Container -->
+        <div id="sceneContainer">
+            <canvas id="gameCanvas"></canvas>
+            
+            <!-- 3D Environment Elements -->
+            <div id="environment">
+                <div class="sky-gradient"></div>
+                <div class="mountains-layer"></div>
+                <div class="clouds-layer">
+                    <div class="cloud cloud1"></div>
+                    <div class="cloud cloud2"></div>
+                    <div class="cloud cloud3"></div>
+                </div>
+            </div>
         </div>
-      </div>
 
-      <div id="controls">
-        <button id="throttleUp" title="Increase Throttle (W / ArrowUp)">▲</button>
-        <button id="throttleDown" title="Decrease Throttle (S / ArrowDown)">▼</button>
-        <button id="brakeBtn" title="Apply Brake (B)">Brake</button>
-        <button id="hornBtn" title="Horn (H / Space)">Horn</button>
-      </div>
+        <!-- Advanced HUD -->
+        <div id="hud" class="hud-active">
+            <!-- Top Status Bar -->
+            <div class="hud-top">
+                <div class="status-panel">
+                    <div class="status-group">
+                        <div class="status-item speed-display">
+                            <div class="status-label">SPEED</div>
+                            <div class="status-value">
+                                <span id="speedValue">0</span>
+                                <span class="unit">KM/H</span>
+                            </div>
+                        </div>
+                        <div class="status-item throttle-display">
+                            <div class="status-label">THROTTLE</div>
+                            <div class="status-value">
+                                <span id="throttleValue">0</span>
+                                <span class="unit">%</span>
+                            </div>
+                            <div class="status-bar">
+                                <div id="throttleBar" class="bar-fill"></div>
+                            </div>
+                        </div>
+                        <div class="status-item brake-display">
+                            <div class="status-label">BRAKE</div>
+                            <div class="status-value">
+                                <span id="brakeValue">0</span>
+                                <span class="unit">%</span>
+                            </div>
+                            <div class="status-bar brake-bar">
+                                <div id="brakeBar" class="bar-fill"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="status-group">
+                        <div class="status-item passengers-display">
+                            <div class="status-label">PASSENGERS</div>
+                            <div class="status-value">
+                                <span id="passengersValue">0</span>
+                                <span>/</span>
+                                <span id="capacityValue">900</span>
+                            </div>
+                        </div>
+                        <div class="status-item signal-display">
+                            <div class="status-label">SIGNAL</div>
+                            <div class="signal-indicator">
+                                <div id="signalLight" class="signal-light green"></div>
+                                <span id="signalAspect">GREEN</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-      <div id="overlay" class="hidden">
-        <div id="overlayText"></div>
-        <button id="resumeBtn" class="hidden">Resume</button>
-      </div>
+            <!-- Route Information -->
+            <div class="hud-center">
+                <div class="route-info">
+                    <div class="station-info">
+                        <div class="current-station">
+                            <div class="station-label">CURRENT STATION</div>
+                            <div class="station-name" id="currentStation">Mumbai CSMT</div>
+                        </div>
+                        <div class="next-station">
+                            <div class="station-label">NEXT STATION</div>
+                            <div class="station-name" id="nextStation">Dadar</div>
+                            <div class="station-distance">
+                                <span id="nextStationDistance">9.01</span> KM
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="route-progress">
+                        <div class="progress-track">
+                            <div id="routeProgress" class="progress-indicator"></div>
+                        </div>
+                        <div class="distance-info">
+                            <span id="totalDistance">168.37</span> KM TOTAL
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Messages -->
+            <div class="hud-messages">
+                <div id="systemMessage" class="system-message hidden">
+                    <div class="message-icon"></div>
+                    <div class="message-text"></div>
+                </div>
+                <div id="ruleHint" class="rule-hint"></div>
+            </div>
+        </div>
+
+        <!-- 3D Control Panel -->
+        <div id="controlPanel">
+            <div class="control-section throttle-section">
+                <div class="control-label">THROTTLE CONTROL</div>
+                <div class="control-buttons">
+                    <button id="throttleUp" class="control-btn throttle-up" title="Increase Throttle (W / Arrow Up)">
+                        <div class="btn-icon">▲</div>
+                        <div class="btn-label">POWER UP</div>
+                    </button>
+                    <button id="throttleDown" class="control-btn throttle-down" title="Decrease Throttle (S / Arrow Down)">
+                        <div class="btn-icon">▼</div>
+                        <div class="btn-label">POWER DOWN</div>
+                    </button>
+                </div>
+            </div>
+
+            <div class="control-section brake-section">
+                <div class="control-label">BRAKE SYSTEM</div>
+                <button id="brakeBtn" class="control-btn brake-btn emergency" title="Apply Brake (B)">
+                    <div class="btn-icon">⬛</div>
+                    <div class="btn-label">EMERGENCY BRAKE</div>
+                </button>
+            </div>
+
+            <div class="control-section sound-section">
+                <div class="control-label">SOUND CONTROL</div>
+                <button id="hornBtn" class="control-btn horn-btn" title="Horn (H / Space)">
+                    <div class="btn-icon">📢</div>
+                    <div class="btn-label">TRAIN HORN</div>
+                </button>
+            </div>
+
+            <div class="control-section view-section">
+                <div class="control-label">VIEW CONTROL</div>
+                <div class="view-buttons">
+                    <button id="viewCockpit" class="control-btn view-btn active">
+                        <div class="btn-label">COCKPIT</div>
+                    </button>
+                    <button id="viewExternal" class="control-btn view-btn">
+                        <div class="btn-label">EXTERNAL</div>
+                    </button>
+                    <button id="viewMap" class="control-btn view-btn">
+                        <div class="btn-label">MAP</div>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Advanced Speedometer -->
+        <div id="speedometer" class="speedometer-3d">
+            <div class="speedometer-face">
+                <div class="speed-numbers">
+                    <div class="speed-mark" data-speed="0">0</div>
+                    <div class="speed-mark" data-speed="50">50</div>
+                    <div class="speed-mark" data-speed="100">100</div>
+                    <div class="speed-mark" data-speed="150">150</div>
+                    <div class="speed-mark" data-speed="200">200</div>
+                </div>
+                <div class="speed-needle" id="speedNeedle"></div>
+                <div class="speed-center"></div>
+                <div class="speed-digital">
+                    <span id="digitalSpeed">0</span>
+                    <span class="digital-unit">KM/H</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Over Overlay -->
+        <div id="gameOverlay" class="overlay hidden">
+            <div class="overlay-content">
+                <h2 id="overlayTitle">Journey Complete!</h2>
+                <p id="overlayMessage">Congratulations! You have successfully completed the Mumbai to Pune route.</p>
+                <div class="overlay-stats">
+                    <div class="stat-item">
+                        <div class="stat-value" id="finalTime">--:--</div>
+                        <div class="stat-label">Journey Time</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="finalPassengers">0</div>
+                        <div class="stat-label">Passengers Served</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="finalScore">0</div>
+                        <div class="stat-label">Performance Score</div>
+                    </div>
+                </div>
+                <div class="overlay-buttons">
+                    <button id="restartBtn" class="overlay-btn primary">
+                        <span>🚂</span> Start New Journey
+                    </button>
+                    <button id="resumeBtn" class="overlay-btn secondary hidden">
+                        <span>▶️</span> Resume
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Audio Controls -->
+        <div id="audioControls">
+            <button id="muteBtn" class="audio-btn" title="Toggle Sound">
+                <span class="audio-icon">🔊</span>
+            </button>
+        </div>
     </div>
 
     <script src="game.js"></script>
-  </body>
-</html> 
+</body>
+</html>
